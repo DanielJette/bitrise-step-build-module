@@ -34,9 +34,7 @@ func failf(s string, a ...interface{}) {
     os.Exit(1)
 }
 
-func ExecuteCommand(executable string, a ...string) {
-    executablePath, _ := exec.LookPath( executable )
-
+func ExecuteRelativeCommand(executablePath string, a ...string) {
     args := append([]string {executablePath}, a...)
     cmd := &exec.Cmd {
         Path: executablePath,
@@ -50,12 +48,17 @@ func ExecuteCommand(executable string, a ...string) {
     }
 }
 
+func ExecuteCommand(executable string, a ...string) {
+    executablePath, _ := exec.LookPath( executable )
+    ExecuteRelativeCommand(executablePath, a...)
+}
+
 func main() {
 
     ExecuteCommand("go", "version")
     ExecuteCommand("git", "--version")
     ExecuteCommand("adb", "--version")
-    ExecuteCommand("gradlew", "--version")
+    ExecuteRelativeCommand("./gradlew", "--version")
     log.Infof("Hello, world!")
 
     os.Exit(0)
