@@ -5,12 +5,12 @@ import (
     "os"
     "path/filepath"
     "strings"
-    "os/exec"
 
     "github.com/bitrise-io/go-steputils/stepconf"
     "github.com/bitrise-io/go-steputils/tools"
     "github.com/bitrise-io/go-utils/log"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/bitrise"
+    "github.com/bitrise-steplib/bitrise-step-build-router-start/execcmd"
 )
 
 const envBuildSlugs = "ROUTER_STARTED_BUILD_SLUGS"
@@ -34,35 +34,7 @@ func failf(s string, a ...interface{}) {
     os.Exit(1)
 }
 
-func ExecuteRelativeCommand(executablePath string, a ...string) {
-    args := append([]string {executablePath}, a...)
-    cmd := &exec.Cmd {
-        Path: executablePath,
-        Args: args,
-        Stdout: os.Stdout,
-        Stderr: os.Stdout,
-    }
-
-    if err := cmd.Run(); err != nil {
-        failf("Error", err)
-    }
-}
-
-func ExecuteCommand(executable string, a ...string) {
-    executablePath, _ := exec.LookPath( executable )
-    ExecuteRelativeCommand(executablePath, a...)
-}
-
-func main() {
-
-    ExecuteCommand("go", "version")
-    ExecuteCommand("git", "--version")
-    ExecuteCommand("adb", "--version")
-    ExecuteRelativeCommand("./gradlew", "--version")
-    log.Infof("Hello, world!")
-
-    os.Exit(0)
-
+func TriggerWorkflow() {
     var cfg Config
     if err := stepconf.Parse(&cfg); err != nil {
         failf("Issue with an input: %s", err)
@@ -182,3 +154,21 @@ func createEnvs(environmentKeys string) []bitrise.Environment {
     }
     return environments
 }
+
+func DisplayInfo() {
+    execcmd.ExecuteCommand("go", "version")
+    execcmd.ExecuteCommand("git", "--version")
+    execcmd.ExecuteCommand("adb", "--version")
+    execcmd.ExecuteRelativeCommand("./gradlew", "--version")
+}
+
+func main() {
+    DisplayInfo()
+
+    log.Infof("Hello, world!")
+
+    os.Exit(0)
+
+    // TriggerWorkflow()
+}
+
