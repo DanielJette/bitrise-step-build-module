@@ -164,7 +164,7 @@ func DisplayInfo() {
 func main() {
     DisplayInfo()
 
-    gradle.BuildAPK()
+    gradle.Assemble()
     env.SetTargetEnv()
     TriggerWorkflow()
 

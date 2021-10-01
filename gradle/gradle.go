@@ -15,7 +15,7 @@ type BuildConfig struct {
 
 var gradlew = "./gradlew"
 
-func BuildAPK() {
+func Assemble() {
 
     var cfg BuildConfig
     if err := stepconf.Parse(&cfg); err != nil {
@@ -24,7 +24,7 @@ func BuildAPK() {
 
     log.Infof("Building %s %s", cfg.Module, cfg.Variant)
 
-    cmd := fmt.Sprintf("%s:%s", cfg.Module, cfg.Variant)
+    cmd := fmt.Sprintf("%s:assemble%s", cfg.Module, cfg.Variant)
 
     execcmd.ExecuteRelativeCommand(gradlew, cmd)
 }
