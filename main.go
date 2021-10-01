@@ -165,9 +165,8 @@ func main() {
 
     // gradle.BuildAPK()
     env.SetTargetEnv()
+    TriggerWorkflow()
 
     os.Exit(0)
-
-    // TriggerWorkflow()
 }
 
