@@ -24,7 +24,7 @@ func BuildAPK() {
 
     log.Infof("Building %s %s", cfg.Module, cfg.Variant)
 
-    cmd := fmt.Sprintf("%s:%s")
+    cmd := fmt.Sprintf("%s:%s", cfg.Module, cfg.Variant)
 
     execcmd.ExecuteRelativeCommand(gradlew, cmd)
 }
