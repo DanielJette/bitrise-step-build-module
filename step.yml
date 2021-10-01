@@ -169,8 +169,212 @@ inputs:
       description: |-
         The fully qualified class name for the Instrumentation test runner. e.g. `androidx.test.runner.AndroidJUnitRunner`
       is_required: true
+  - deploy_path: "$BITRISE_DEPLOY_DIR"
+    opts:
+      title: "Deploy directory or file path"
+      description: |
+        Specify the directory or file path which will be deployed.
+        
+        If the specified path is a directory, then every file
+        in the specified directory, excluding sub-directories, will be deployed.
+        
+        To upload the directory's content
+        recursively, you should use the **Compress the artifacts into one file?** option
+        which compresses the whole directory, with
+        every sub-directory included.
 
+        If you specify a file path, then only the specified
+        file will be deployed.
+      is_required: true
+  - notify_user_groups: "everyone"
+    opts:
+      title: "Notify: User Roles"
+      description: |
+        Your App's user roles you want to notify. Separate the role names with commas.
+        Possible role names:
+
+        * none
+        * testers
+        * developers
+        * admins
+        * owner
+        * everyone
+
+        An example to notify your developers and testers:
+
+        `testers, developers`
+
+        If you want to notify everyone in the app's team, just specify `everyone`.
+
+        If you don't want to notify anyone, set this to `none`.
+  - notify_email_list:
+    opts:
+      title: "Notify: Emails"
+      description: |
+        Email addresses to notify. Separate them with commas.
+
+        You can specify any email address, the recipients
+        don't have to be in your team.
+        
+        Please note that if the email address is associated with a Bitrise account, 
+        the user must be [watching](https://devcenter.bitrise.io/builds/configuring-notifications/#watching-an-app) the app.
+      is_sensitive: true
+  - is_enable_public_page: "true"
+    opts:
+      title: "Enable public page for the App?"
+      description: |
+        If this option is enabled, a public install page
+        will be available with a long and random URL which can be shared
+        with others who are not registered on Bitrise.
+
+        If you disable this option, the **Notify: Emails** option will
+        be ignored and the **Notify: User Roles** users will receive the build's
+        URL instead of the public page's URL!
+      is_required: true
+      is_expand: false
+      value_options:
+      - "true"
+      - "false"
+  - is_compress: "false"
+    opts:
+      title: Compress the artifacts into one file?
+      summary: |-
+        If this option is set to `true` and a Deploy directory was specified, 
+        the artifacts in that directory will be compressed into a single ZIP file.
+      description: |-
+        If this option is set to `true` and a Deploy directory was specified, 
+        the artifacts in that directory will be compressed into a single ZIP file.
+        
+        You can specify a custom name for the ZIP using the `zip_name`
+        option. If you do not specify a custom name, the default `Deploy directory` name will be used.
+
+        If this option is set to `false`, the artifacts
+        found in the Deploy directory folder will be deployed
+        separately.
+      is_required: true
+      is_expand: false
+      value_options:
+        - "true"
+        - "false"
+  - public_install_page_url_map_format: "{{range $index, $element := .}}{{if $index}}|{{end}}{{$element.File}}=>{{$element.URL}}{{end}}"
+    opts:
+      title: Format for the BITRISE_PUBLIC_INSTALL_PAGE_URL_MAP output
+      summary: You can customize the format of the `BITRISE_PUBLIC_INSTALL_PAGE_URL_MAP` output so that the next Step can render the output.
+      description: |-
+        Provide a language template description using [Golang templates](https://golang.org/pkg/text/template)
+        so that the **Deploy to Bitrise.io** Step can build the required custom output.
+      is_required: true
+      is_expand: false
+  - permanent_download_url_map_format: "{{range $index, $element := .}}{{if $index}}|{{end}}{{$element.File}}=>{{$element.URL}}{{end}}"
+    opts:
+      title: Format for the BITRISE_PERMANENT_DOWNLOAD_URL_MAP output
+      summary: You can customize the format of the `BITRISE_PERMANENT_DOWNLOAD_URL_MAP` output so that the next Step can render the output.
+      description: |-
+        Provide a language template description using [Golang templates](https://golang.org/pkg/text/template)
+        so that the **Deploy to Bitrise.io** Step can build the required custom output for the permanent download URL.  
+      is_required: true
+      is_expand: false
+  - zip_name:
+    opts:
+      category: Debug
+      title: Name of the compressed artifact (without .zip extension)
+      summary: |-
+        Specify a custom name for the compressed artifact.
+      description: |-
+        If you do not specify a custom name, the Deploy directory name will be used.
+        You can specify a custom name for the ZIP using the `zip_name`
+        option. 
+
+        This option only works if you selected *true* for *is_compress*.
+  - build_url: "$BITRISE_BUILD_URL"
+    opts:
+      category: Debug
+      title: "Bitrise Build URL"
+      summary: |-
+        Unique build URL of this build on Bitrise.io
+      description: |-
+        Unique build URL of this build on Bitrise.io
+      is_required: true
+      is_dont_change_value: true
+  - build_api_token: "$BITRISE_BUILD_API_TOKEN"
+    opts:
+      category: Debug
+      title: Bitrise Build API Token
+      summary: |-
+        The build's API Token for the build on Bitrise.io
+      description: |-
+        The build's API Token for the build on Bitrise.io
+      is_required: true
+      is_dont_change_value: true
+      is_sensitive: true
+  - addon_api_base_url: "https://vdt.bitrise.io/test"
+    opts:
+      title: "Test API's base URL"
+      summary: The URL where test API is accessible.
+      description: |
+        The URL where test API is accessible.
+      is_required: true
+      is_dont_change_value: true
+  - addon_api_token: $ADDON_VDTESTING_API_TOKEN
+    opts: 
+      title: "API Token"
+      summary: The token required to authenticate with the API.
+      description: |
+        The token required to authenticate with the API.
+      is_dont_change_value: true
+      is_sensitive: true
+  - debug_mode: "false"
+    opts: 
+      category: Debug
+      title: "Enable Debug Mode"
+      summary: The Step will print more verbose logs if enabled.
+      description: The Step will print more verbose logs if enabled.
+      is_required: true
+      value_options:
+        - "false"
+        - "true"
+  - bundletool_version: "0.13.4"
+    opts:
+      category: Debug
+      title: "Bundletool version"
+      summary: The specific bundletool version you want to use.
+      description: |-
+        If you need a specific [bundletool version]((https://github.com/google/bundletool/releases) other than the default version,
+        you can modify the value of the **Bundletool version** required input.
+      is_required: true
 outputs:
+  - BITRISE_PUBLIC_INSTALL_PAGE_URL:
+    opts:
+      title: Public Install Page URL
+      description: |-
+        Public Install Page's URL, if the
+        *Enable public page for the App?* option was *enabled*.
+  - BITRISE_PUBLIC_INSTALL_PAGE_URL_MAP:
+    opts:
+      title: Map of filenames and Public Install Page URLs
+      description: |-
+        Public Install Page URLs by the artifact's file path.
+        Only set it if the *Enable public page for the App?* option was *enabled*.
+
+        The default format is `KEY1=>VALUE|KEY2=>VALUE` but is controlled by the `public_install_page_url_map_format` input
+
+        Examples:
+
+        - $BITRISE_DEPLOY_DIR/ios_app.ipa=>https://ios_app/public/install/page
+        - $BITRISE_DEPLOY_DIR/android_app.apk=>https://android_app/public/install/page|$BITRISE_DEPLOY_DIR/ios_app.ipa=>https://ios_app/public/install/page
+  - BITRISE_PERMANENT_DOWNLOAD_URL_MAP:
+    opts:
+      title: Map of filenames and Permanent Download URLs
+      description: |-
+        The output contains permanent Download URLs for each artifact. The URLs can be shared in any communication channel and they won't expire.
+        The default format is `KEY1=>VALUE|KEY2=>VALUE` where key is the filename and the value is the URL.
+        If you change `permanent_download_url_map_format` input then that will modify the format of this Env Var.
+        You can customize the format of the multiple URLs.
+
+        Examples:
+
+        - $BITRISE_DEPLOY_DIR/ios_app.ipa=>https://app.bitrise.io/artifacts/ipa-slug/download
+        - $BITRISE_DEPLOY_DIR/android_app.apk=>https://app.bitrise.io/artifacts/apk-slug/download|$BITRISE_DEPLOY_DIR/ios_app.ipa=>https://app.bitrise.io/artifacts/ipa-slug/download
   - ROUTER_STARTED_BUILD_SLUGS:
     opts:
       title: "Started Build Slugs"
