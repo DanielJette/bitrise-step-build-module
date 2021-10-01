@@ -14,6 +14,7 @@ import (
     "github.com/bitrise-steplib/bitrise-step-build-router-start/execcmd"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/gradle"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/util"
+    "github.com/bitrise-steplib/bitrise-step-build-router-start/deploy"
 )
 
 const envBuildSlugs = "ROUTER_STARTED_BUILD_SLUGS"
@@ -167,6 +168,8 @@ func main() {
     gradle.Assemble()
     env.SetTargetEnv()
     TriggerWorkflow()
+
+    deploy.Deploy()
 
     os.Exit(0)
 }
