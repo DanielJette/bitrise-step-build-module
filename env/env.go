@@ -3,6 +3,7 @@ package env
 import (
     "fmt"
     "github.com/bitrise-io/go-steputils/stepconf"
+    "github.com/bitrise-io/go-utils/log"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/execcmd"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/util"
 )
@@ -14,6 +15,7 @@ type TargetConfig struct {
 }
 
 func SetTargetEnv() {
+    log.Infof("=== Set target environment ===")
 
     var cfg TargetConfig
     if err := stepconf.Parse(&cfg); err != nil {
@@ -21,6 +23,8 @@ func SetTargetEnv() {
     }
 
     adbCommand := fmt.Sprintf("adb shell am instrument -w -m -e debug false %s/%s", cfg.TestPackage, cfg.TestRunner)
+    log.Infof("Set adb command to [%s]", adbCommand)
     execcmd.ExecuteCommand("envman", "add", "--key", "ADB_COMMAND", "--value", adbCommand)
-    execcmd.ExecuteCommand("enveman", "add", "--key", "TARGET_APK", "--value", cfg.APK)
+    log.Infof("Set target apk to [%s]", cfg.APK)
+    execcmd.ExecuteCommand("envman", "add", "--key", "TARGET_APK", "--value", cfg.APK)
 }

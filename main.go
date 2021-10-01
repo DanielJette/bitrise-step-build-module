@@ -154,6 +154,7 @@ func createEnvs(environmentKeys string) []bitrise.Environment {
 }
 
 func DisplayInfo() {
+    log.Infof("=== Display environment info ===")
     execcmd.ExecuteCommand("go", "version")
     execcmd.ExecuteCommand("git", "--version")
     execcmd.ExecuteCommand("adb", "--version")
@@ -165,7 +166,7 @@ func main() {
 
     // gradle.BuildAPK()
     env.SetTargetEnv()
-    TriggerWorkflow()
+    // TriggerWorkflow()
 
     os.Exit(0)
 }
