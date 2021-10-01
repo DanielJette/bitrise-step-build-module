@@ -3,14 +3,8 @@ package execcmd
 import (
     "os"
     "os/exec"
-
-    "github.com/bitrise-io/go-utils/log"
+    "github.com/bitrise-steplib/bitrise-step-build-router-start/util"
 )
-
-func failf(s string, a ...interface{}) {
-    log.Errorf(s, a...)
-    os.Exit(1)
-}
 
 func ExecuteRelativeCommand(executablePath string, a ...string) {
     args := append([]string {executablePath}, a...)
@@ -22,7 +16,7 @@ func ExecuteRelativeCommand(executablePath string, a ...string) {
     }
 
     if err := cmd.Run(); err != nil {
-        failf("Error", err)
+        util.Failf("Error", err)
     }
 }
 

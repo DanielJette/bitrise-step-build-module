@@ -10,7 +10,10 @@ import (
     "github.com/bitrise-io/go-steputils/tools"
     "github.com/bitrise-io/go-utils/log"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/bitrise"
+    "github.com/bitrise-steplib/bitrise-step-build-router-start/env"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/execcmd"
+    // "github.com/bitrise-steplib/bitrise-step-build-router-start/gradle"
+    "github.com/bitrise-steplib/bitrise-step-build-router-start/util"
 )
 
 const envBuildSlugs = "ROUTER_STARTED_BUILD_SLUGS"
@@ -29,15 +32,10 @@ type Config struct {
     IsVerboseLog           bool            `env:"verbose,required"`
 }
 
-func failf(s string, a ...interface{}) {
-    log.Errorf(s, a...)
-    os.Exit(1)
-}
-
 func TriggerWorkflow() {
     var cfg Config
     if err := stepconf.Parse(&cfg); err != nil {
-        failf("Issue with an input: %s", err)
+        util.Failf("Issue with an input: %s", err)
     }
 
     stepconf.Print(cfg)
@@ -49,7 +47,7 @@ func TriggerWorkflow() {
 
     build, err := app.GetBuild(cfg.BuildSlug)
     if err != nil {
-        failf("failed to get build, error: %s", err)
+        util.Failf("failed to get build, error: %s", err)
     }
 
     log.Infof("Starting builds:")
@@ -60,17 +58,17 @@ func TriggerWorkflow() {
         wf = strings.TrimSpace(wf)
         startedBuild, err := app.StartBuild(wf, build.OriginalBuildParams, cfg.BuildNumber, environments)
         if err != nil {
-            failf("Failed to start build, error: %s", err)
+            util.Failf("Failed to start build, error: %s", err)
         }
         if startedBuild.BuildSlug == "" {
-            failf("Build was not started. This could mean that manual build approval is enabled for this project and it's blocking this step from starting builds.")
+            util.Failf("Build was not started. This could mean that manual build approval is enabled for this project and it's blocking this step from starting builds.")
         }
         buildSlugs = append(buildSlugs, startedBuild.BuildSlug)
         log.Printf("- %s started (https://app.bitrise.io/build/%s)", startedBuild.TriggeredWorkflow, startedBuild.BuildSlug)
     }
 
     if err := tools.ExportEnvironmentWithEnvman(envBuildSlugs, strings.Join(buildSlugs, "\n")); err != nil {
-        failf("Failed to export environment variable, error: %s", err)
+        util.Failf("Failed to export environment variable, error: %s", err)
     }
 
     if cfg.WaitForBuilds != "true" {
@@ -132,7 +130,7 @@ func TriggerWorkflow() {
             }
         }
     }); err != nil {
-        failf("An error occoured: %s", err)
+        util.Failf("An error occoured: %s", err)
     }
 }
 
@@ -159,13 +157,14 @@ func DisplayInfo() {
     execcmd.ExecuteCommand("go", "version")
     execcmd.ExecuteCommand("git", "--version")
     execcmd.ExecuteCommand("adb", "--version")
-    execcmd.ExecuteRelativeCommand("./gradlew", "--version")
+    // execcmd.ExecuteRelativeCommand("./gradlew", "--version")
 }
 
 func main() {
     DisplayInfo()
 
-    log.Infof("Hello, world!")
+    // gradle.BuildAPK()
+    env.SetTargetEnv()
 
     os.Exit(0)
 

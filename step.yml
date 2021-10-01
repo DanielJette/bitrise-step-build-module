@@ -134,6 +134,42 @@ inputs:
       value_options:
         - "yes"
         - "no"
+
+  - module: "$MODULE_NAME"
+    opts:
+      title: Module
+      description: |-
+        Set the module that you want to build. To see your available modules, please open your project in Android Studio and go in [Project Structure] and see the list on the left.
+      is_required: true
+
+  - variant: "$VARIANT"
+    opts:
+      title: Variant
+      description: |-
+        Set the variant(s) that you want to build. To see your available variants, please open your project in Android Studio and go in [Project Structure] -> variants section. You can set multiple variants separated by \n character. For instance: - variant: myvariant1\nmyvariant2.
+      is_required: true
+
+  - target_apk: "$TARGET_APK"
+    opts:
+      title: Target APK
+      description: |-
+        The name of the APK to test. e.g. `app-debug.apk`
+      is_required: true
+
+  - test_package: "$TEST_PACKAGE"
+    opts:
+      title: Test Package
+      description: |-
+        The package name of the instrumentation tests. e.g. `com.my.app.test`
+      is_required: true
+
+  - test_runner: "androidx.test.runner.AndroidJUnitRunner"
+    opts:
+      title: Test Runner
+      description: |-
+        The fully qualified class name for the Instrumentation test runner. e.g. `androidx.test.runner.AndroidJUnitRunner`
+      is_required: true
+
 outputs:
   - ROUTER_STARTED_BUILD_SLUGS:
     opts:
