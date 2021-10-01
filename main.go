@@ -12,7 +12,7 @@ import (
     "github.com/bitrise-steplib/bitrise-step-build-router-start/bitrise"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/env"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/execcmd"
-    // "github.com/bitrise-steplib/bitrise-step-build-router-start/gradle"
+    "github.com/bitrise-steplib/bitrise-step-build-router-start/gradle"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/util"
 )
 
@@ -158,15 +158,15 @@ func DisplayInfo() {
     execcmd.ExecuteCommand("go", "version")
     execcmd.ExecuteCommand("git", "--version")
     execcmd.ExecuteCommand("adb", "--version")
-    // execcmd.ExecuteRelativeCommand("./gradlew", "--version")
+    execcmd.ExecuteRelativeCommand("./gradlew", "--version")
 }
 
 func main() {
     DisplayInfo()
 
-    // gradle.BuildAPK()
+    gradle.BuildAPK()
     env.SetTargetEnv()
-    // TriggerWorkflow()
+    TriggerWorkflow()
 
     os.Exit(0)
 }
