@@ -22,5 +22,5 @@ func SetTargetEnv() {
 
     adbCommand := fmt.Sprintf("adb shell am instrument -w -m -e debug false %s/%s", cfg.TestPackage, cfg.TestRunner)
     execcmd.ExecuteCommand("envman", "add", "--key", "ADB_COMMAND", "--value", adbCommand)
-    execcmd.ExecuteCommand("enveman", "add", "--key", "TARGET_APK", "--value", APK)
+    execcmd.ExecuteCommand("enveman", "add", "--key", "TARGET_APK", "--value", cfg.APK)
 }
