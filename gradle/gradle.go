@@ -4,7 +4,7 @@ import (
     "fmt"
     "github.com/bitrise-io/go-steputils/stepconf"
     "github.com/bitrise-io/go-utils/log"
-    "github.com/bitrise-steplib/bitrise-step-build-router-start/execcmd"
+    "github.com/bitrise-steplib/bitrise-step-build-router-start/execmd"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/util"
 )
 
@@ -26,5 +26,11 @@ func Assemble() {
 
     cmd := fmt.Sprintf("%s:assemble%s", cfg.Module, cfg.Variant)
 
-    execcmd.ExecuteRelativeCommand(gradlew, cmd)
+    execmd.ExecuteRelativeCommand(gradlew, cmd)
+}
+
+func Deploy() {
+
+    // features/login/build/outputs/apk/androidTest/internal/debug/feature-login-internal-debug-androidTest.apk
+
 }

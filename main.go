@@ -4,7 +4,7 @@ import (
     "os"
     "github.com/bitrise-io/go-utils/log"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/env"
-    "github.com/bitrise-steplib/bitrise-step-build-router-start/execcmd"
+    "github.com/bitrise-steplib/bitrise-step-build-router-start/execmd"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/gradle"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/deploy"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/trigger"
@@ -12,10 +12,10 @@ import (
 
 func DisplayInfo() {
     log.Infof("=== Display environment info ===")
-    execcmd.ExecuteCommand("go", "version")
-    execcmd.ExecuteCommand("git", "--version")
-    execcmd.ExecuteCommand("adb", "--version")
-    execcmd.ExecuteRelativeCommand("./gradlew", "--version")
+    execmd.ExecuteCommand("go", "version")
+    execmd.ExecuteCommand("git", "--version")
+    execmd.ExecuteCommand("adb", "--version")
+    execmd.ExecuteRelativeCommand("./gradlew", "--version")
 }
 
 func main() {

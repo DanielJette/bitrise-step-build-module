@@ -1,4 +1,4 @@
-package execcmd
+package execmd
 
 import (
     "os"
