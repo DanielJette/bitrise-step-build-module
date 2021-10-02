@@ -9,8 +9,10 @@ import (
 )
 
 type BuildConfig struct {
-    Module            string          `env:"module,required"`
-    Variant           string          `env:"variant,required"`
+    Module      string     `env:"module,required"`
+    Variant     string     `env:"variant,required"`
+    DeployDir   string     `env:"deploy_path,required"`
+    APK         string     `env:"target_apk,required"`
 }
 
 var gradlew = "./gradlew"
@@ -24,13 +26,14 @@ func Assemble() {
 
     log.Infof("Building %s %s", cfg.Module, cfg.Variant)
 
-    cmd := fmt.Sprintf("%s:assemble%s", cfg.Module, cfg.Variant)
-
-    execmd.ExecuteRelativeCommand(gradlew, cmd)
+     cmd := fmt.Sprintf("%s:assemble%s", cfg.Module, cfg.Variant)
+     execmd.ExecuteRelativeCommand(gradlew, cmd)
 }
 
-func Deploy() {
-
-    // features/login/build/outputs/apk/androidTest/internal/debug/feature-login-internal-debug-androidTest.apk
-
+func PrepareForDeploy() {
+    var cfg BuildConfig
+    if err := stepconf.Parse(&cfg); err != nil {
+        util.Failf("Issue with an input: %s", err)
+    }
+    execmd.ExecuteRelativeCommand("find", ".", "-name", cfg.APK, "|", "xargs", "-I", "{}", "cp", "{}", cfg.DeployDir)
 }

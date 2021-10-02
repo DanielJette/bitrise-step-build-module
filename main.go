@@ -22,9 +22,9 @@ func main() {
     DisplayInfo()
 
     gradle.Assemble()
+    gradle.PrepareForDeploy()
     env.SetTargetEnv()
     trigger.TriggerWorkflow()
-
     deploy.Deploy()
 
     os.Exit(0)
