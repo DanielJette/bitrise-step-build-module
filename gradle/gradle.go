@@ -35,5 +35,5 @@ func PrepareForDeploy() {
     if err := stepconf.Parse(&cfg); err != nil {
         util.Failf("Issue with an input: %s", err)
     }
-    execmd.ExecuteRelativeCommand("find", ".", "-name", cfg.APK, "|", "xargs", "-I", "{}", "cp", "{}", cfg.DeployDir)
+    execmd.ExecuteCommand("find", ".", "-name", cfg.APK, "-exec", "cp", "{}", cfg.DeployDir, ";")
 }
