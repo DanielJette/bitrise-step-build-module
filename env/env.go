@@ -29,7 +29,6 @@ func SetTargetEnv() {
     os.Setenv("ADB_COMMAND", adbCommand)
 
     log.Infof("Set target apk to [%s]", cfg.APK)
-    apkCommand := fmt.Sprintf("\"%s\"",cfg.APK)
-    execmd.ExecuteCommand("envman", "add", "--key", "TARGET_APK", "--value", apkCommand)
-    os.Setenv("TARGET_APK", apkCommand)
+    execmd.ExecuteCommand("envman", "add", "--key", "TARGET_APK", "--value", cfg.APK)
+    os.Setenv("TARGET_APK", cfg.APK)
 }
