@@ -18,7 +18,6 @@ type BuildConfig struct {
 var gradlew = "./gradlew"
 
 func Assemble() {
-
     var cfg BuildConfig
     if err := stepconf.Parse(&cfg); err != nil {
         util.Failf("Issue with an input: %s", err)

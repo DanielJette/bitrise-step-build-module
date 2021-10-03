@@ -93,47 +93,6 @@ inputs:
         ENV_3`
       is_expand: false
       is_required: false
-  - wait_for_builds: "false"
-    opts:
-      title: Wait for builds
-      summary: Should the Step wait for the builds to be finished?
-      description: Should the Step wait for the builds to be finished?
-      is_required: false
-      value_options:
-        - "false"
-        - "true"
-  - build_artifacts_save_path:
-    opts:
-      title: The path of the build artifacts
-      summary: The path that the build artifacts will be saved to if the **Wait for builds** input is set to `true`.
-      description: |
-          The path where build artifacts will be saved to if the **Wait for builds** input is set to `true`. 
-      
-          Please note that the path must be an actual, existing path, ending with `/`. The `BITRISE_DEPLOY_DIR` Environment Variable is NOT a valid value. 
-      
-          Note that when this Step triggers a Workflow, the artifacts of the triggered Workflow are only available to the Workflow that contains this Step, and not other Workflows. 
-          The triggered Workflow MUST have a **Deploy to Bitrise.io** Step to deploy build artifacts!
-      is_required: false
-      is_sensitive: false
-  - abort_on_fail: "no"
-    opts:
-      title: Abort all builds if any of them
-      description: |-
-        Abort all started builds if any build fails
-      is_required: true
-      is_sensitive: false
-      value_options:
-        - "yes"
-        - "no"
-  - verbose: "no"
-    opts:
-      title: Enable verbose log?
-      description: |-
-        You can enable the verbose log for easier debugging.
-      is_required: true
-      value_options:
-        - "yes"
-        - "no"
 
   - module: "$MODULE_NAME"
     opts:
@@ -323,16 +282,15 @@ inputs:
         The token required to authenticate with the API.
       is_dont_change_value: true
       is_sensitive: true
-  - debug_mode: "false"
-    opts: 
-      category: Debug
-      title: "Enable Debug Mode"
-      summary: The Step will print more verbose logs if enabled.
-      description: The Step will print more verbose logs if enabled.
+  - verbose: "no"
+    opts:
+      title: Enable verbose log?
+      description: |-
+        You can enable the verbose log for easier debugging.
       is_required: true
       value_options:
-        - "false"
-        - "true"
+        - "yes"
+        - "no"
   - bundletool_version: "0.13.4"
     opts:
       category: Debug
@@ -342,6 +300,38 @@ inputs:
         If you need a specific [bundletool version]((https://github.com/google/bundletool/releases) other than the default version,
         you can modify the value of the **Bundletool version** required input.
       is_required: true
+  - wait_for_builds: "false"
+    opts:
+      title: Wait for builds
+      summary: Should the Step wait for the builds to be finished?
+      description: Should the Step wait for the builds to be finished?
+      is_required: false
+      value_options:
+        - "false"
+        - "true"
+  - build_artifacts_save_path:
+    opts:
+      title: The path of the build artifacts
+      summary: The path that the build artifacts will be saved to if the **Wait for builds** input is set to `true`.
+      description: |
+          The path where build artifacts will be saved to if the **Wait for builds** input is set to `true`. 
+      
+          Please note that the path must be an actual, existing path, ending with `/`. The `BITRISE_DEPLOY_DIR` Environment Variable is NOT a valid value. 
+      
+          Note that when this Step triggers a Workflow, the artifacts of the triggered Workflow are only available to the Workflow that contains this Step, and not other Workflows. 
+          The triggered Workflow MUST have a **Deploy to Bitrise.io** Step to deploy build artifacts!
+      is_required: false
+      is_sensitive: false
+  - abort_on_fail: "no"
+    opts:
+      title: Abort all builds if any of them
+      description: |-
+        Abort all started builds if any build fails
+      is_required: true
+      is_sensitive: false
+      value_options:
+        - "yes"
+        - "no"
 outputs:
   - BITRISE_PUBLIC_INSTALL_PAGE_URL:
     opts:
