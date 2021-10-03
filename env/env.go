@@ -2,6 +2,7 @@ package env
 
 import (
     "fmt"
+    "os"
     "github.com/bitrise-io/go-steputils/stepconf"
     "github.com/bitrise-io/go-utils/log"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/execmd"
@@ -25,6 +26,10 @@ func SetTargetEnv() {
     adbCommand := fmt.Sprintf("\"adb shell am instrument -w -m -e debug false %s/%s\"", cfg.TestPackage, cfg.TestRunner)
     log.Infof("Set adb command to [%s]", adbCommand)
     execmd.ExecuteCommand("envman", "add", "--key", "ADB_COMMAND", "--value", adbCommand)
+    os.Setenv("ADB_COMMAND", adbCommand)
+
     log.Infof("Set target apk to [%s]", cfg.APK)
-    execmd.ExecuteCommand("envman", "add", "--key", "TARGET_APK", "--value", fmt.Sprintf("\"%s\"",cfg.APK))
+    apkCommand := fmt.Sprintf("\"%s\"",cfg.APK)
+    execmd.ExecuteCommand("envman", "add", "--key", "TARGET_APK", "--value", apkCommand)
+    os.Setenv("TARGET_APK", apkCommand)
 }
