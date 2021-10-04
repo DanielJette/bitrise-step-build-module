@@ -3,11 +3,11 @@ package main
 import (
     "os"
     "github.com/bitrise-io/go-utils/log"
-    "github.com/bitrise-steplib/bitrise-step-build-router-start/env"
+    // "github.com/bitrise-steplib/bitrise-step-build-router-start/env"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/execmd"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/gradle"
-    "github.com/bitrise-steplib/bitrise-step-build-router-start/deploy"
-    "github.com/bitrise-steplib/bitrise-step-build-router-start/trigger"
+    // "github.com/bitrise-steplib/bitrise-step-build-router-start/deploy"
+    // "github.com/bitrise-steplib/bitrise-step-build-router-start/trigger"
 )
 
 func DisplayInfo() {
@@ -21,11 +21,12 @@ func DisplayInfo() {
 func main() {
     DisplayInfo()
 
-    gradle.Assemble()
-    gradle.PrepareForDeploy()
-    env.SetTargetEnv()
-    deploy.Deploy()
-    trigger.TriggerWorkflow()
+    gradle.PrintModifiedModules()
+    // gradle.Assemble()
+    // gradle.PrepareForDeploy()
+    // env.SetTargetEnv()
+    // deploy.Deploy()
+    // trigger.TriggerWorkflow()
 
     os.Exit(0)
 }
