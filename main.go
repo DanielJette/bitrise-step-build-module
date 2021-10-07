@@ -18,7 +18,7 @@ func DisplayInfo() {
     execmd.ExecuteCommand("go", "version")
     execmd.ExecuteCommand("git", "--version")
     execmd.ExecuteCommand("adb", "--version")
-    // execmd.ExecuteRelativeCommand("./gradlew", "--version")
+    execmd.ExecuteRelativeCommand("./gradlew", "--version")
 }
 
 type PathConfig struct {
