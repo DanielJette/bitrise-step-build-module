@@ -36,7 +36,3 @@ func PrepareForDeploy() {
     }
     execmd.ExecuteCommand("find", ".", "-name", cfg.APK, "-exec", "cp", "{}", cfg.DeployDir, ";")
 }
-
-func PrintModifiedModules() {
-    execmd.ExecuteRelativeCommand(gradlew, "-q", "printModulesFromPaths", "-PprintAll=true")
-}

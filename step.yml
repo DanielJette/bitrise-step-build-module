@@ -128,6 +128,16 @@ inputs:
       description: |-
         The fully qualified class name for the Instrumentation test runner. e.g. `androidx.test.runner.AndroidJUnitRunner`
       is_required: true
+
+  - github_access_token: "$GITHUB_TOKEN"
+    opts:
+      title: "GitHub personal access token"
+      description: |
+        To setup a **GitHub personal access token** visit: https://github.com/settings/tokens
+        Add repo(Full control of private repositories) scope to the generated token, to allow to comment on GitHub Pull Request or Issue.
+      is_required: true
+      is_sensitive: true
+
   - deploy_path: "$BITRISE_DEPLOY_DIR"
     opts:
       title: "Deploy directory or file path"
