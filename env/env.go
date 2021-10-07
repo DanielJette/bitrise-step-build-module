@@ -13,6 +13,7 @@ type TargetConfig struct {
     APK             string          `env:"target_apk,required"`
     TestPackage     string          `env:"test_package,required"`
     TestRunner      string          `env:"test_runner,required"`
+    JUnit5          bool            `env:"is_junit_5,required"`
 }
 
 func SetTargetEnv() {
@@ -23,7 +24,14 @@ func SetTargetEnv() {
         util.Failf("Issue with an input: %s", err)
     }
 
-    adbCommand := fmt.Sprintf("\"adb shell am instrument -w -m -e debug false %s/%s\"", cfg.TestPackage, cfg.TestRunner)
+    var runnerBuilder string
+    if cfg.JUnit5 {
+        runnerBuilder = "-e runnerBuilder de.mannodermaus.junit5.AndroidJUnit5Builder"
+    } else {
+        runnerBuilder = ""
+    }
+
+    adbCommand := fmt.Sprintf("\"adb shell am instrument -w -m %s -e debug false %s/%s\"", runnerBuilder, cfg.TestPackage, cfg.TestRunner)
     log.Infof("Set adb command to [%s]", adbCommand)
     execmd.ExecuteCommand("envman", "add", "--key", "ADB_COMMAND", "--value", adbCommand)
     os.Setenv("ADB_COMMAND", adbCommand)

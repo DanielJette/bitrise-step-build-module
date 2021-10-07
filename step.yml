@@ -129,6 +129,19 @@ inputs:
         The fully qualified class name for the Instrumentation test runner. e.g. `androidx.test.runner.AndroidJUnitRunner`
       is_required: true
 
+  - is_junit_5: false
+    opts:
+      title: "JUnit 5 support"
+      summary: "Do the tests require JUnit 5 support?"
+      description: |
+        Declares whether the adb test instrumentation command should include a command-line a `runnerBuilder` which support Junit 5.
+
+        Adds `-e runnerBuilder de.mannodermaus.junit5.AndroidJUnit5Builder` to the invocation.
+      is_required: true
+      value_options:
+      - true
+      - false
+
   - github_access_token: "$GITHUB_TOKEN"
     opts:
       title: "GitHub personal access token"
