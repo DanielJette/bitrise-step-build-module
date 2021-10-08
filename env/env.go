@@ -31,7 +31,8 @@ func SetTargetEnv() {
         runnerBuilder = ""
     }
 
-    adbCommand := fmt.Sprintf("\"adb shell am instrument -w -m %s -e debug false %s/%s\"", runnerBuilder, cfg.TestPackage, cfg.TestRunner)
+    adbFormatString := "\"adb shell am instrument -r -w %s %s/%s\""
+    adbCommand := fmt.Sprintf(adbFormatString, runnerBuilder, cfg.TestPackage, cfg.TestRunner)
     log.Infof("Set adb command to [%s]", adbCommand)
     execmd.ExecuteCommand("envman", "add", "--key", "ADB_COMMAND", "--value", adbCommand)
     os.Setenv("ADB_COMMAND", adbCommand)
