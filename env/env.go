@@ -14,6 +14,7 @@ type TargetConfig struct {
     TestPackage     string          `env:"test_package,required"`
     TestRunner      string          `env:"test_runner,required"`
     JUnit5          bool            `env:"is_junit_5,required"`
+    Module          string          `env:"module,required"`
 }
 
 func SetTargetEnv() {
@@ -40,4 +41,6 @@ func SetTargetEnv() {
     log.Infof("Set target apk to [%s]", cfg.APK)
     execmd.ExecuteCommand("envman", "add", "--key", "TARGET_APK", "--value", cfg.APK)
     os.Setenv("TARGET_APK", cfg.APK)
+
+    os.Setenv("MODULE_NAME", cfg.Module)
 }
