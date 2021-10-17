@@ -63,9 +63,9 @@ func GetChangedModules() map[string]bool {
         }
     }
 
-    fmt.Println("Changes detected in modules:")
+    fmt.Println("Changes detected in:")
     for key, _ := range modulesChanged {
-        fmt.Println(" -", key)
+        fmt.Println(" - [", key, "]")
     }
 
     return modulesChanged

@@ -1,6 +1,7 @@
 package main
 
 import (
+    "fmt"
     "os"
     "github.com/bitrise-io/go-utils/log"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/env"
@@ -26,6 +27,13 @@ type PathConfig struct {
 }
 
 func isSkippable(module string) bool {
+
+    path := fmt.Sprintf("./features/%s/src/androidTest/", module)
+    if _, err := os.Stat(path); os.IsNotExist(err) {
+        log.Errorf("No tests present in %s. Skipping build", module)
+        return true
+    }
+
     modules := gh.GetChangedModules()
     if modules[module] == false {
         log.Errorf("No changes detected in %s. Skipping build", module)
