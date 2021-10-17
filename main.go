@@ -29,8 +29,9 @@ type PathConfig struct {
 func isSkippable(module string) bool {
 
     path := fmt.Sprintf("./features/%s/src/androidTest/", module)
+    log.Infof("Checking for %s", path)
     if _, err := os.Stat(path); os.IsNotExist(err) {
-        log.Errorf("No tests present in %s. Skipping build", module)
+        log.Errorf("No tests detected in %s. Skipping build", module)
         return true
     }
 
@@ -39,6 +40,7 @@ func isSkippable(module string) bool {
         log.Errorf("No changes detected in %s. Skipping build", module)
         return true
     }
+    log.Infof("Changes to module %s found. Running tests.", module)
     return false
 }
 
