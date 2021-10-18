@@ -4,7 +4,7 @@ import (
     "fmt"
     "os"
     "strings"
-    "path/filepath"
+    "time"
     "github.com/bitrise-io/go-utils/log"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/env"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/execmd"
@@ -30,21 +30,12 @@ type PathConfig struct {
 
 func checkIfTestsExist(testPath string) bool {
     log.Infof("Checking for tests in %s", testPath)
-    var exists bool = false
     var root = fmt.Sprintf("./%s", testPath)
-    filepath.Walk(root,
-        func(path string, info os.FileInfo, err error) error {
-            if err != nil {
-                return err
-            }
-            if path == testPath {
-                exists = true
-                fmt.Printf("Found %s!\n", path)
-                return nil
-            }
-            return nil
-        })
-    return exists
+    if _, err := os.Stat(root); !os.IsNotExist(err) {
+        log.Infof("OK. Found %s!\n", testPath)
+        return true
+    }
+    return false
 }
 
 func isSkippable(module string) bool {
@@ -67,19 +58,33 @@ func isSkippable(module string) bool {
 }
 
 func buildAndTrigger() {
+    timestamp()
     gradle.Assemble()
+    timestamp()
     gradle.PrepareForDeploy()
+    timestamp()
     env.SetTargetEnv()
+    timestamp()
     deploy.Deploy()
+    timestamp()
     trigger.TriggerWorkflow()
+    timestamp()
+}
+
+var startTime int64 = 0
+
+func timestamp() {
+    log.Infof("[Time] %d", time.Now().UnixNano() / int64(time.Millisecond) - startTime)
 }
 
 func main() {
+    startTime = time.Now().UnixNano() / int64(time.Millisecond)
+    timestamp()
     var cfg PathConfig
     if err := stepconf.Parse(&cfg); err != nil {
         util.Failf("Issue with an input: %s", err)
     }
-
+    timestamp()
     // DisplayInfo()
 
     if isSkippable(cfg.Module) {
@@ -87,7 +92,7 @@ func main() {
     }
 
     log.Infof("Building %s", cfg.Module)
-
+    timestamp()
     buildAndTrigger()
 
     os.Exit(0)
