@@ -3,6 +3,7 @@ package main
 import (
     "fmt"
     "os"
+    "path/filepath"
     "github.com/bitrise-io/go-utils/log"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/env"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/execmd"
@@ -26,11 +27,30 @@ type PathConfig struct {
     Module      string     `env:"module,required"`
 }
 
+func checkIfTestsExist(testPath string) bool {
+    log.Infof("Checking for tests in %s", testPath)
+    var exists bool = false
+    filepath.Walk("./features",
+        func(path string, info os.FileInfo, err error) error {
+            if err != nil {
+                return err
+            }
+            fmt.Println("checking ", path)
+            if path == testPath {
+                exists = true
+                fmt.Printf("Found %s!\n", path)
+                return nil
+            }
+            return nil
+        })
+    return exists
+}
+
 func isSkippable(module string) bool {
 
-    path := fmt.Sprintf("./features/%s/src/androidTest/", module)
-    log.Infof("Checking for %s", path)
-    if _, err := os.Stat(path); os.IsNotExist(err) {
+    testPath := fmt.Sprintf("features/%s/src/androidTest", module)
+    exists := checkIfTestsExist(testPath)
+    if !exists {
         log.Errorf("No tests detected in %s. Skipping build", module)
         return true
     }
@@ -44,13 +64,21 @@ func isSkippable(module string) bool {
     return false
 }
 
+func buildAndTrigger() {
+    gradle.Assemble()
+    gradle.PrepareForDeploy()
+    env.SetTargetEnv()
+    deploy.Deploy()
+    trigger.TriggerWorkflow()
+}
+
 func main() {
     var cfg PathConfig
     if err := stepconf.Parse(&cfg); err != nil {
         util.Failf("Issue with an input: %s", err)
     }
 
-    DisplayInfo()
+    // DisplayInfo()
 
     if isSkippable(cfg.Module) {
         os.Exit(0)
@@ -58,11 +86,7 @@ func main() {
 
     log.Infof("Building %s", cfg.Module)
 
-    gradle.Assemble()
-    gradle.PrepareForDeploy()
-    env.SetTargetEnv()
-    deploy.Deploy()
-    trigger.TriggerWorkflow()
+    // buildAndTrigger()
 
     os.Exit(0)
 }

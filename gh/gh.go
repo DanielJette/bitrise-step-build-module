@@ -41,6 +41,11 @@ func GetChangedModules() map[string]bool {
         util.Failf("Issue with an input: %s", err)
     }
 
+    modulesChanged := map[string]bool{}
+    if cfg.Token == "testing" {
+        return modulesChanged
+    }
+
     ctx := context.Background()
     ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: cfg.Token})
     tc := oauth2.NewClient(ctx, ts)
@@ -50,7 +55,6 @@ func GetChangedModules() map[string]bool {
     pr, _, _ := client.PullRequests.Get(ctx, owner, repo, prNumber)
 
     numPages := getNumPages(*pr.ChangedFiles)
-    modulesChanged := map[string]bool{}
 
     for i := 1; i <= numPages; i++ {
         fmt.Println("Fetching page", i, "...")
