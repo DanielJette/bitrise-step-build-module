@@ -3,6 +3,7 @@ package main
 import (
     "fmt"
     "os"
+    "strings"
     "path/filepath"
     "github.com/bitrise-io/go-utils/log"
     "github.com/bitrise-steplib/bitrise-step-build-router-start/env"
@@ -48,7 +49,8 @@ func checkIfTestsExist(testPath string) bool {
 
 func isSkippable(module string) bool {
 
-    testPath := fmt.Sprintf("features/%s/src/androidTest", module)
+    testModuleDir := strings.TrimPrefix(module, "feature-")
+    testPath := fmt.Sprintf("features/%s/src/androidTest", testModuleDir)
     exists := checkIfTestsExist(testPath)
     if !exists {
         log.Errorf("No tests detected in %s. Skipping build", module)
