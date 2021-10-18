@@ -31,12 +31,12 @@ type PathConfig struct {
 func checkIfTestsExist(testPath string) bool {
     log.Infof("Checking for tests in %s", testPath)
     var exists bool = false
-    filepath.Walk("./features",
+    var root = fmt.Sprintf("./%s", testPath)
+    filepath.Walk(root,
         func(path string, info os.FileInfo, err error) error {
             if err != nil {
                 return err
             }
-            fmt.Println("checking ", path)
             if path == testPath {
                 exists = true
                 fmt.Printf("Found %s!\n", path)
@@ -88,7 +88,7 @@ func main() {
 
     log.Infof("Building %s", cfg.Module)
 
-    // buildAndTrigger()
+    buildAndTrigger()
 
     os.Exit(0)
 }
